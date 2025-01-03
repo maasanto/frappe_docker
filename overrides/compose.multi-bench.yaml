@@ -48,6 +48,7 @@ networks:
   traefik-public:
     external: true
   mariadb-network:
+    name: ${DB_NETWORK_NAME:-mariadb-network}
     external: true
   bench-network:
     name: ${ROUTER}

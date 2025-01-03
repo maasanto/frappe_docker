@@ -13,7 +13,7 @@ services:
       # Using the environment variables USERNAME and HASHED_PASSWORD
       - traefik.http.middlewares.admin-auth.basicauth.users=admin:${HASHED_PASSWORD:?No HASHED_PASSWORD set}
       # Uses the environment variable TRAEFIK_DOMAIN
-      - traefik.http.routers.traefik-public-http.rule=Host(`${TRAEFIK_DOMAIN:?No TRAEFIK_DOMAIN set}`)
+      - traefik.http.routers.traefik-public-http.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.amingenierie-opensource.fr`)
       - traefik.http.routers.traefik-public-http.entrypoints=http
       # Use the special Traefik service api@internal with the web UI/Dashboard
       - traefik.http.routers.traefik-public-http.service=api@internal
@@ -34,12 +34,14 @@ services:
       - --log
       # Enable the Dashboard and API
       - --api
+      - --api.insecure=true
     ports:
       - ${HTTP_PUBLISH_PORT:-80}:80
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - traefik-public
+
 
 networks:
   traefik-public:
